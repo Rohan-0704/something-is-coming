@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Valentine 💖</title>
+  <link rel="stylesheet" href="style.css?v=300" />
+</head>
+
+<body>
+  <canvas id="confettiCanvas"></canvas>
+
+  <audio id="bgMusic" loop playsinline preload="auto">
+    <source src="song.mp3" type="audio/mpeg" />
+  </audio>
+
+  <!-- Top UI -->
+  <div class="top-ui">
+    <button class="nav-btn" id="backBtn" aria-label="Back">←</button>
+    <div class="tap-hint" id="tapHint">Tap anywhere to leave a heart 💗</div>
+    <button class="music-toggle" id="musicToggle">🔇 Music</button>
+  </div>
+
+  <!-- PIN -->
+  <section class="scene active" id="pinScene">
+    <div class="center-card glass">
+      <div class="lock-title">Private 💌</div>
+      <div class="lock-sub">Enter PIN to open</div>
+
+      <div class="pin-row">
+        <input id="pinInput" inputmode="numeric" pattern="[0-9]*" maxlength="6" placeholder="••••" />
+        <button class="btn pink" id="pinBtn" type="button">Unlock</button>
+      </div>
+
+      <div class="hint-phone" title="Hint">
+        <div class="phone-icon">📱</div>
+        <div class="hint-text">Hint</div>
+      </div>
+
+      <div class="pin-error" id="pinError">Wrong PIN. Try again 💗</div>
+      <div class="pin-foot">Tip: open using VS Code “Live Server”.</div>
+    </div>
+  </section>
+
+  <!-- ENVELOPE -->
+  <section class="scene" id="envelopeScene">
+    <div class="envelope-stage">
+      <div class="envelope-title">For you 💗</div>
+
+      <button class="envelope-btn" id="envelopeBtn" type="button" aria-label="Open envelope">
+        <div class="envelope" id="envelope">
+          <div class="env-back"></div>
+
+          <div class="env-pocket">
+            <div class="env-letter" id="envLetter" aria-hidden="true">
+              <div class="env-letter-front">
+                <div class="env-letter-title">To my Valentine</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="env-front"></div>
+          <div class="env-flap"></div>
+
+          <div class="env-label" id="openLabel">
+            Tap to Open 💌
+            <div class="env-sparkle"></div>
+          </div>
+        </div>
+      </button>
+
+      <div class="envelope-foot">A little something from me✨</div>
+    </div>
+  </section>
+
+  <!-- BOOK -->
+  <section class="scene" id="bookScene">
+    <div class="book-shell">
+      <div class="book" id="book">
+
+        <!-- SHEET 0: INTRO LETTER -->
+        <div class="sheet" data-sheet="0">
+          <div class="page face front">
+            <div class="page-inner intro">
+              <div class="mini-label">A little love card</div>
+              <h1>Hey My Love ❤️</h1>
+
+              <div class="letter glass-soft">
+                <div class="letter-head">
+                  <div class="letter-date" data-letter-date></div>
+                  <div class="letter-to">My love,</div>
+                </div>
+                <div class="letter-body" data-intro-letter></div>
+                <div class="letter-foot">
+                  <div class="letter-sign">— Chintu</div>
+                </div>
+              </div>
+
+              <div class="page-actions">
+                <button class="btn pink" data-next type="button">Start</button>
+              </div>
+            </div>
+          </div>
+          <div class="page face back"></div>
+        </div>
+
+        <!-- SHEET 1: PHOTOS 1-6 -->
+        <div class="sheet" data-sheet="1">
+          <div class="page face front">
+            <div class="page-inner">
+              <div class="mini-label">Chapter 1</div>
+              <h1>Our Memories ✨</h1>
+              <div class="inline-hint">Tip: tap a photo to flip it 💞</div>
+
+              <div class="content-scroll">
+                <div class="photo-grid" data-photo-page="1">
+                  <div class="pwrap" data-i="0"><div class="polaroid"><div class="p-inner">
+                    <div class="p-front"><img src="images/1.jpeg" alt="1"><div class="pcap">Our first coffee date ☕</div></div>
+                    <div class="p-back"><div class="pback-title">Memory 💗</div><div class="pback-text">I still replay this day in my head.</div></div>
+                  </div></div></div>
+
+                  <div class="pwrap" data-i="1"><div class="polaroid"><div class="p-inner">
+                    <div class="p-front"><img src="images/2.jpeg" alt="2"><div class="pcap">Laughing in the rain 🌧️</div></div>
+                    <div class="p-back"><div class="pback-title">Truth</div><div class="pback-text">You make even storms feel warm.</div></div>
+                  </div></div></div>
+
+                  <div class="pwrap" data-i="2"><div class="polaroid"><div class="p-inner">
+                    <div class="p-front"><img src="images/3.jpeg" alt="3"><div class="pcap">Your smile melts me ❤️</div></div>
+                    <div class="p-back"><div class="pback-title">Forever</div><div class="pback-text">This is my favorite view.</div></div>
+                  </div></div></div>
+
+                  <div class="pwrap" data-i="3"><div class="polaroid"><div class="p-inner">
+                    <div class="p-front"><img src="images/4.jpeg" alt="4"><div class="pcap">Sunset picnic 🌅</div></div>
+                    <div class="p-back"><div class="pback-title">Promise</div><div class="pback-text">More sunsets — always with you.</div></div>
+                  </div></div></div>
+
+                  <div class="pwrap" data-i="4"><div class="polaroid"><div class="p-inner">
+                    <div class="p-front"><img src="images/5.jpeg" alt="5"><div class="pcap">Midnight stargazing 🌌</div></div>
+                    <div class="p-back"><div class="pback-title">Wish</div><div class="pback-text">I wished for you — I got you.</div></div>
+                  </div></div></div>
+
+                  <div class="pwrap" data-i="5"><div class="polaroid"><div class="p-inner">
+                    <div class="p-front"><img src="images/6.jpeg" alt="6"><div class="pcap">Every hug feels like home 🤗</div></div>
+                    <div class="p-back"><div class="pback-title">Home</div><div class="pback-text">You’re where my peace lives.</div></div>
+                  </div></div></div>
+                </div>
+              </div>
+
+              <div class="page-actions sticky-actions">
+                <button class="btn pink nextBtn hidden" data-next type="button">Next</button>
+              </div>
+            </div>
+          </div>
+          <div class="page face back"></div>
+        </div>
+
+        <!-- SHEET 2: PHOTOS 7-12 -->
+        <div class="sheet" data-sheet="2">
+          <div class="page face front">
+            <div class="page-inner">
+              <div class="mini-label">Chapter 2</div>
+              <h1>More Memories 💕</h1>
+              <div class="inline-hint">Tip: tap a photo to flip it 💞</div>
+
+              <div class="content-scroll">
+                <div class="photo-grid" data-photo-page="2">
+                  <div class="pwrap" data-i="0"><div class="polaroid"><div class="p-inner">
+                    <div class="p-front"><img src="images/7.jpeg" alt="7"><div class="pcap">Silly selfie 😂</div></div>
+                    <div class="p-back"><div class="pback-title">Us</div><div class="pback-text">My favorite kind of chaos.</div></div>
+                  </div></div></div>
+
+                  <div class="pwrap" data-i="1"><div class="polaroid"><div class="p-inner">
+                    <div class="p-front"><img src="images/8.jpeg" alt="8"><div class="pcap">Walking hand in hand 🚶‍♂️🚶‍♀️</div></div>
+                    <div class="p-back"><div class="pback-title">Always</div><div class="pback-text">Where you go, I’m with you.</div></div>
+                  </div></div></div>
+
+                  <div class="pwrap" data-i="2"><div class="polaroid"><div class="p-inner">
+                    <div class="p-front"><img src="images/9.jpeg" alt="9"><div class="pcap">Cooking together 🍳</div></div>
+                    <div class="p-back"><div class="pback-title">Sweet</div><div class="pback-text">Even food tastes better with you.</div></div>
+                  </div></div></div>
+
+                  <div class="pwrap" data-i="3"><div class="polaroid"><div class="p-inner">
+                    <div class="p-front"><img src="images/10.jpeg" alt="10"><div class="pcap">Our first trip ✈️</div></div>
+                    <div class="p-back"><div class="pback-title">Next</div><div class="pback-text">More places. Same person: you.</div></div>
+                  </div></div></div>
+
+                  <div class="pwrap" data-i="4"><div class="polaroid"><div class="p-inner">
+                    <div class="p-front"><img src="images/11.jpeg" alt="11"><div class="pcap">Lazy Sunday mornings ☕🛌</div></div>
+                    <div class="p-back"><div class="pback-title">Calm</div><div class="pback-text">My favorite kind of peace.</div></div>
+                  </div></div></div>
+
+                  <div class="pwrap" data-i="5"><div class="polaroid"><div class="p-inner">
+                    <div class="p-front"><img src="images/12.jpeg" alt="12"><div class="pcap">Every moment with you ✨</div></div>
+                    <div class="p-back"><div class="pback-title">Forever</div><div class="pback-text">This is only the beginning.</div></div>
+                  </div></div></div>
+                </div>
+              </div>
+
+              <div class="page-actions sticky-actions">
+                <button class="btn pink nextBtn hidden" data-next type="button">Next</button>
+              </div>
+            </div>
+          </div>
+          <div class="page face back"></div>
+        </div>
+
+        <!-- SHEET 3: GIFT -->
+        <div class="sheet" data-sheet="3">
+          <div class="page face front">
+            <div class="page-inner">
+              <div class="mini-label">A gift</div>
+              <h1>For You 🌹</h1>
+
+              <div class="content-scroll">
+                <div class="media-center">
+                  <img src="images/flowers.jpg" class="flowers" alt="flowers">
+                </div>
+<div class="gift-page-center">
+  <p class="mid-text">A little virtual bouquet — until I hand you the real one 💗</p>
+
+  <div class="gift-reveal" id="giftReveal">
+
+                  <div class="gift-card glass-soft">
+                    <div class="gift-title">Surprise 💞</div>
+                    <div class="gift-msg">
+                      You just unlocked: <b>1</b> big hug, <b>3</b> forehead kisses, and a <b>date night</b> the moment I see you.
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="page-actions sticky-actions">
+                <button class="btn pink" id="unwrapBtn" type="button">Open Gift 🎁</button>
+                <button class="btn pink" id="giftNextBtn" type="button">Next</button>
+              </div>
+            </div>
+          </div>
+          <div class="page face back"></div>
+        </div>
+        </div>
+
+        <!-- SHEET 4: PERSONAL LETTER (PAPER) -->
+        <div class="sheet" data-sheet="4">
+          <div class="page face front">
+            <div class="page-inner">
+              <div class="mini-label">My Letter</div>
+              <h1>For You 💌</h1>
+
+              <div class="content-scroll">
+                <div class="paper-letter">
+                  <div class="paper-head">
+                    <div class="paper-date" data-letter-date></div>
+                    <div class="paper-to">My love,</div>
+                  </div>
+                  <div class="paper-body" data-personal-letter></div>
+                  <div class="paper-foot">
+                    <div class="paper-sign">— Rohan</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="page-actions sticky-actions">
+                <button class="btn pink" data-next type="button">Next</button>
+              </div>
+            </div>
+          </div>
+          <div class="page face back"></div>
+        </div>
+
+        <!-- SHEET 5: UNTIL I SEE YOU (with image) -->
+        <div class="sheet" data-sheet="5">
+          <div class="page face front">
+            <div class="page-inner">
+              <div class="mini-label">Countdown</div>
+              <h1>Until I See You Again ⏳</h1>
+
+              <div class="content-scroll">
+                <div class="count-media">
+                  <img src="images/meet.jpg" class="count-img" alt="us" />
+                  <div class="count-caption">One more countdown… then it’s us 💗</div>
+                </div>
+
+                <div class="countdown-card glass-soft">
+                  <div class="count-row">
+                    <div class="count-box"><div class="count-num" id="seeDays">9</div><div class="count-lbl">Days</div></div>
+                    <div class="count-box"><div class="count-num" id="seeHours">00</div><div class="count-lbl">Hours</div></div>
+                    <div class="count-box"><div class="count-num" id="seeMins">00</div><div class="count-lbl">Min</div></div>
+                    <div class="count-box"><div class="count-num" id="seeSecs">00</div><div class="count-lbl">Sec</div></div>
+                  </div>
+                  <div class="count-note">Starting from <b>9 days</b> (change it in script.js)</div>
+                </div>
+              </div>
+
+              <div class="page-actions sticky-actions">
+                <button class="btn pink" data-next type="button">Next</button>
+              </div>
+            </div>
+          </div>
+          <div class="page face back"></div>
+        </div>
+
+        <!-- SHEET 6: SIGNATURE -->
+        <div class="sheet" data-sheet="6">
+          <div class="page face front">
+            <div class="page-inner">
+              <div class="mini-label">With all my love</div>
+              <h1>Always Yours 💞</h1>
+
+              <div class="sig-wrap">
+                <img class="sig-img" src="images/sig.png" alt="signature" />
+              </div>
+
+              <p class="mid-text">This is only the beginning of us.</p>
+              <div class="sig-name">— Rohan</div>
+
+              <div class="page-actions sticky-actions">
+                <button class="btn pink" data-next type="button">One more…</button>
+              </div>
+            </div>
+          </div>
+          <div class="page face back"></div>
+        </div>
+
+        <!-- SHEET 7: PART 2 (museum teaser) -->
+        <div class="sheet" data-sheet="7">
+          <div class="page face front">
+            <div class="page-inner museum">
+              <div class="mini-label">Exhibit Preview</div>
+              <h1>Part 2: Opening Night ✨</h1>
+
+              <div class="museum-card">
+                <div class="museum-top">
+                  <div class="museum-tag">PRIVATE GALLERY INVITE</div>
+                  <div class="museum-date">Feb 19, 2026</div>
+                </div>
+
+                <div class="museum-title">“Five Years of Us”</div>
+                <div class="museum-sub">A collection of moments. A promise for what’s next.</div>
+
+                <div class="countdown-card museum-count">
+                  <div class="count-row">
+                    <div class="count-box"><div class="count-num" id="anniDays">00</div><div class="count-lbl">Days</div></div>
+                    <div class="count-box"><div class="count-num" id="anniHours">00</div><div class="count-lbl">Hours</div></div>
+                    <div class="count-box"><div class="count-num" id="anniMins">00</div><div class="count-lbl">Min</div></div>
+                    <div class="count-box"><div class="count-num" id="anniSecs">00</div><div class="count-lbl">Sec</div></div>
+                  </div>
+                </div>
+
+                <div class="museum-footer">
+                  <div class="museum-note">Dress code: butterflies in your stomach 🦋</div>
+                  <button class="btn pink" id="finalConfettiBtn" type="button">Seal the invite 💗</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="page face back"></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <script src="script.js?v=300" defer></script>
+
+  <!-- Museum ticket toast -->
+<div class="toast" id="museumToast" aria-hidden="true">
+  <div class="toast-card">
+    <div class="toast-title">Invite Sealed ✅</div>
+    <div class="toast-sub">Part 2 unlocks on <b>Feb 19</b> ✨</div>
+    <div class="toast-ticket">
+      <div class="ticket-left">
+        <div class="ticket-label">ADMIT ONE</div>
+        <div class="ticket-name">“Five Years of Us”</div>
+      </div>
+      <div class="ticket-right">
+        <div class="ticket-date">FEB 19</div>
+        <div class="ticket-time">Opening Night</div>
+      </div>
+    </div>
+    <button class="btn pink toast-btn" id="toastCloseBtn" type="button">Ok 💗</button>
+  </div>
+</div>
+
+</body>
+</html>
