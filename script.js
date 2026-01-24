@@ -1,23 +1,33 @@
 // ======================
 // EDIT THESE
 // ======================
-const CORRECT_PIN = "0219";
+const CORRECT_PIN = "1802";
 
-const INTRO_LETTER = `I made this little card just for you —
-a place for our moments, our laughs, and our love.
+// Intro page text
+const INTRO_LETTER = `A little something I made for you. 
 
-Turn the pages slowly… like a real book.`;
+I saw people making these digital cards, I was like why not create a whole website for my baby.
+A place for our moments, our laughs, and our love.
 
-const PERSONAL_LETTER = `I love you.
+Happy Valentine's Day!💗💗💗💗
+`;
 
-(Write your full letter here — it will auto-fit.)
-I’m grateful for you, proud of you, and crazy about you.
+// Personal letter page text (paper)
+const PERSONAL_LETTER = `I love you the most.
 
-Always,
-Rohan`;
+I just love you so much. I really was nothing without you, I am nothing without you and its only you that is the only forever in my life.
+This was just something small but if I really want to make a website to show everything you do for me, everything you are for me, it will take me infinite time to make it and infinite time for you to go through.
+I know I am not my best self at times but no matter what I am never going to stop getting better for, getting the fucking best for you
+Whatever you do for me is just too much. You have every single one of my qualties and your own too, there is just no word to describe how amazing you are and how lucky I am to have you by my side.
+I will cherish you forever, I will not stop surprising you, I will give you every single thing you want even beyond my powers, and still it won't be enough in comparison to what you do for me.
+You are the best you are my forever Valentine and you are my everything.
+
+Yours Always,`;
 
 const SEE_YOU_IN_DAYS = 9;
-const ANNIVERSARY_TARGET = new Date(2026, 1, 19, 0, 0, 0); // Feb 19, 2026
+
+// Feb 19, 2026 (local time)
+const ANNIVERSARY_TARGET = new Date(2026, 1, 19, 0, 0, 0); // month 1 = Feb
 // ======================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -30,12 +40,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const envelopeScene = document.getElementById("envelopeScene");
   const bookScene = document.getElementById("bookScene");
 
+  const envelopeWrap = document.getElementById("envelopeWrap");
+
   const pinInput = document.getElementById("pinInput");
   const pinBtn = document.getElementById("pinBtn");
   const pinError = document.getElementById("pinError");
-
-  const envelopeBtn = document.getElementById("envelopeBtn");
-  const envelope = document.getElementById("envelope");
 
   const sheets = Array.from(document.querySelectorAll(".sheet"));
 
@@ -43,6 +52,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const giftReveal = document.getElementById("giftReveal");
   const giftNextBtn = document.getElementById("giftNextBtn");
   const finalConfettiBtn = document.getElementById("finalConfettiBtn");
+
+  const museumToast = document.getElementById("museumToast");
+  const toastCloseBtn = document.getElementById("toastCloseBtn");
 
   // Countdown elements
   const seeDays = document.getElementById("seeDays");
@@ -68,22 +80,13 @@ document.addEventListener("DOMContentLoaded", () => {
   let envelopeOpened = false;
 
   // Timings
-  const PAGE_TURN_MS = 1900;
+  const PAGE_TURN_MS = 2400;
   const PAGE_TURN_LOCK_MS = PAGE_TURN_MS + 260;
   const PHOTO_REVEAL_DELAY_MS = 1350;
 
   function showScene(sceneEl){
     [pinScene, envelopeScene, bookScene].forEach(s => s.classList.remove("active"));
     sceneEl.classList.add("active");
-
-    // show back button only in book
-    if (sceneEl === bookScene) {
-      backBtn.style.opacity = currentSheet === 0 ? "0.35" : "1";
-      backBtn.style.pointerEvents = "auto";
-    } else {
-      backBtn.style.opacity = "0";
-      backBtn.style.pointerEvents = "none";
-    }
   }
 
   function fillText(){
@@ -114,7 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
     else { bgMusic.pause(); musicEnabled = false; musicToggle.textContent = "🔇 Music"; }
   });
 
-  // iPhone: first gesture unlock
+  // user gesture for iPhone
   document.addEventListener("pointerdown", () => { tryStartMusic(); }, { once:true });
 
   // Hearts
@@ -122,7 +125,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const t = e.target;
     if (t && (t.tagName === "BUTTON" || t.closest("button") || t.tagName === "INPUT")) return;
     if (tapHint) tapHint.style.opacity = "0";
-    for (let i=0;i<4;i++) spawnHeart(e.clientX + (Math.random()-0.5)*26, e.clientY + (Math.random()-0.5)*26);
+    for (let i=0;i<5;i++) spawnHeart(e.clientX + (Math.random()-0.5)*28, e.clientY + (Math.random()-0.5)*28);
   });
 
   function spawnHeart(x,y){
@@ -219,14 +222,29 @@ document.addEventListener("DOMContentLoaded", () => {
     else { confettiRunning = false; ctx.clearRect(0,0,window.innerWidth,window.innerHeight); }
   }
 
+  // Toast
+  function showToast(){
+    if (!museumToast) return;
+    museumToast.classList.add("show");
+    museumToast.setAttribute("aria-hidden", "false");
+  }
+  function hideToast(){
+    if (!museumToast) return;
+    museumToast.classList.remove("show");
+    museumToast.setAttribute("aria-hidden", "true");
+  }
+  toastCloseBtn?.addEventListener("click", hideToast);
+  museumToast?.addEventListener("click", (e) => { if (e.target === museumToast) hideToast(); });
+
   // PIN
   function checkPin(){
     const val = (pinInput.value || "").trim();
     if (val === CORRECT_PIN){
       pinError.style.display = "none";
-      showScene(envelopeScene);
-      resetEnvelope();
       tryStartMusic();
+      showScene(envelopeScene);
+      envelopeOpened = false;
+      envelopeWrap?.classList.remove("opening","opened");
     } else {
       pinError.style.display = "block";
       pinInput.value = "";
@@ -237,26 +255,30 @@ document.addEventListener("DOMContentLoaded", () => {
   pinBtn.addEventListener("click", (e) => { e.preventDefault(); checkPin(); });
   pinInput.addEventListener("keydown", (e) => { if (e.key === "Enter") checkPin(); });
 
-  function resetEnvelope(){
-    envelopeOpened = false;
-    envelope.classList.remove("open");
-  }
-
-  // Envelope open -> transition into book
-  envelopeBtn.addEventListener("click", () => {
+  // Envelope open -> book
+  function openEnvelope(){
     if (envelopeOpened) return;
     envelopeOpened = true;
 
-    tryStartMusic();
-    envelope.classList.add("open");
+    envelopeWrap.classList.add("opening");
+    setTimeout(() => {
+      envelopeWrap.classList.remove("opening");
+      envelopeWrap.classList.add("opened");
+    }, 980);
 
-    // let the letter slide out fully, then fade into book
+    // after letter rises, transition to book start page
     setTimeout(() => {
       showScene(bookScene);
       currentSheet = 0;
       renderBook();
-    }, 1700);
-  });
+      onEnterSheet(currentSheet);
+      revealOnSheet(currentSheet);
+    }, 1900);
+  }
+
+  envelopeWrap?.addEventListener("click", openEnvelope);
+  envelopeWrap?.addEventListener("pointerup", (e) => { e.preventDefault(); openEnvelope(); }, { passive:false });
+  envelopeWrap?.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") openEnvelope(); });
 
   // Book
   function renderBook(){
@@ -273,6 +295,15 @@ document.addEventListener("DOMContentLoaded", () => {
     backBtn.style.pointerEvents = "auto";
   }
 
+  function onEnterSheet(sheetIndex){
+    const sheet = sheets[sheetIndex];
+    if (!sheet) return;
+
+    // Signature: fade in
+    const sig = sheet.querySelector(".sig-img");
+    if (sig) setTimeout(() => sig.classList.add("show"), 450);
+  }
+
   function next(){
     if (isTurning) return;
     if (currentSheet >= sheets.length - 1) return;
@@ -287,6 +318,7 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => {
       turning?.classList.remove("turning");
       revealOnSheet(currentSheet);
+      onEnterSheet(currentSheet);
       isTurning = false;
     }, PAGE_TURN_LOCK_MS);
   }
@@ -305,13 +337,13 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => {
       turning?.classList.remove("turning");
       revealOnSheet(currentSheet);
+      onEnterSheet(currentSheet);
       isTurning = false;
     }, PAGE_TURN_LOCK_MS);
   }
 
   backBtn.addEventListener("click", prev);
 
-  // Global Next
   document.querySelectorAll("[data-next]").forEach(btn => {
     btn.addEventListener("click", (e) => { e.preventDefault(); next(); });
     btn.addEventListener("pointerup", (e) => { e.preventDefault(); next(); }, { passive:false });
@@ -329,7 +361,7 @@ document.addEventListener("DOMContentLoaded", () => {
     giftNextBtn.addEventListener("touchend", giftGoNext, { passive:false });
   }
 
-  // Photo reveal (strict order)
+  // Photo reveal (strict order) + show next button after all revealed
   function revealOnSheet(sheetIndex){
     const sheet = sheets[sheetIndex];
     const front = sheet?.querySelector(".page.face.front");
@@ -337,61 +369,45 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const grid = front.querySelector(".photo-grid");
     const nextBtn = front.querySelector(".nextBtn");
-    if (!grid || !nextBtn) return;
 
-    nextBtn.classList.add("hidden");
+    if (grid && nextBtn){
+      nextBtn.classList.add("hidden");
 
-    const wraps = Array.from(grid.querySelectorAll(".pwrap"))
-      .sort((a,b) => Number(a.dataset.i) - Number(b.dataset.i));
+      const wraps = Array.from(grid.querySelectorAll(".pwrap"))
+        .sort((a,b) => Number(a.dataset.i) - Number(b.dataset.i));
 
-    wraps.forEach(w => w.classList.remove("show"));
-    wraps.forEach((w, i) => setTimeout(() => w.classList.add("show"), i * PHOTO_REVEAL_DELAY_MS));
+      wraps.forEach(w => w.classList.remove("show"));
 
-    const total = wraps.length * PHOTO_REVEAL_DELAY_MS + 900;
-    setTimeout(() => nextBtn.classList.remove("hidden"), total);
+      wraps.forEach((w, i) => {
+        setTimeout(() => w.classList.add("show"), i * PHOTO_REVEAL_DELAY_MS);
+      });
 
-    Array.from(grid.querySelectorAll(".polaroid")).forEach(p => {
-      p.onclick = () => p.classList.toggle("flipped");
-    });
+      // show button after last photo finishes
+      const totalDelay = wraps.length * PHOTO_REVEAL_DELAY_MS + 900;
+      setTimeout(() => nextBtn.classList.remove("hidden"), totalDelay);
+
+      // flip behavior
+      Array.from(grid.querySelectorAll(".polaroid")).forEach(p => {
+        p.onclick = () => p.classList.toggle("flipped");
+      });
+    }
   }
 
   // Gift open
   unwrapBtn?.addEventListener("click", () => {
     giftReveal.classList.add("show");
-    createConfetti(340);
+    createConfetti(360);
     unwrapBtn.disabled = true;
     unwrapBtn.textContent = "Opened 💝";
   });
 
-  // Museum confetti
-const museumToast = document.getElementById("museumToast");
-const toastCloseBtn = document.getElementById("toastCloseBtn");
+  // Museum page button
+  finalConfettiBtn?.addEventListener("click", () => {
+    createConfetti(440);
+    showToast();
+  });
 
-function showToast(){
-  if (!museumToast) return;
-  museumToast.classList.add("show");
-  museumToast.setAttribute("aria-hidden", "false");
-}
-
-function hideToast(){
-  if (!museumToast) return;
-  museumToast.classList.remove("show");
-  museumToast.setAttribute("aria-hidden", "true");
-}
-
-finalConfettiBtn?.addEventListener("click", () => {
-  createConfetti(420);
-  showToast();
-});
-
-toastCloseBtn?.addEventListener("click", hideToast);
-museumToast?.addEventListener("click", (e) => {
-  // click outside card closes
-  if (e.target === museumToast) hideToast();
-});
-
-
-  // Countdowns
+  // Countdown
   const seeTarget = new Date(Date.now() + SEE_YOU_IN_DAYS * 24 * 60 * 60 * 1000);
   function pad2(n){ return String(n).padStart(2, "0"); }
 
@@ -421,5 +437,4 @@ museumToast?.addEventListener("click", (e) => {
   // Init
   fillText();
   showScene(pinScene);
-  renderBook();
 });
